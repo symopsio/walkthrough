@@ -1,6 +1,6 @@
 # Offering a Terminal Interface
 
-Currently, the only interface available to our flow for our user is Slack. In order for our flow to have a terminal interface to set temporary credentials on, we add a third call to `sym` to our `request.sh` script.
+So far the only interface to our flow is Slack. In order to add a terminal interface to set temporary credentials on, we add a third call to `sym` in our `request.sh` script.
 
 Please append this line to the script.
 

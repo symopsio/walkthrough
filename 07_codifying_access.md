@@ -1,6 +1,6 @@
 # Codifying an Access Workflow
 
-Let's reopen our `demo.symflow` file, and implement the access workflow we set out to acheive. As a reminder, there are three main steps:
+Let's reopen our `demo.symflow` file, and implement the access workflow we set out to achieve. As a reminder, there are three main steps:
 
 1. A user requests access to a CloudTrail trail
 2. Approval for this access is sent to a group of approvers in Slack
@@ -40,7 +40,7 @@ io.confirm(channel, prompt: prompt)
 
 ### Step 3: Escalate
 
-Next, we need to implement Step 3. Sym's standard library exposes a `iam` module which you can import. Let's put that import at the top of our file.
+Next, we need to implement Step 3. Sym's standard library exposes an `iam` module which you can import. Let's put that import at the top of our file.
 
 ```symflow
 import iam
