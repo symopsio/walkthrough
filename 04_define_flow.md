@@ -50,6 +50,8 @@ end
 
 A `flow` is equivalent to a `function` in other languages: it is a packaged piece of code that can be named and invoked with arguments. Sym Workflows are lexically scoped, but a `flow` is not a closure: there are no variable bindings associated with it. The name of a `flow` must be unique within the file it is defined in.
 
-In our starter file, we see a simple "Hello, World" flow which uses the `io` module to `say` a message to the current user. Since the Sym Slack Bot automatically provides an `io` location to the Sym Users service, this message will go to the `user` via a Slack DM.
+In our starter file, we see a simple "Hello, World" flow which uses the `io` module to `say` a message to the current user. The `io` module will always find the most appropriate interface to send data to the user on. For example, if there is a terminal waiting for the output of a workflow, the data will go there. Otherwise, `io` might fall back to a chat-ops interface, such as Slack.
+
+Since the Sym Slack Bot automatically provides an `io` location to the Sym Users service, and there is no terminal waiting for output, this message will go to the `user` via a Slack DM. Later, we will explore how to attach a terminal to a workflow triggered by an Event, so as to receive output locally.
 
 **[Next: Deploying Your Workflow](05_deploy_flow.md)**

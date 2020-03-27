@@ -40,7 +40,7 @@ io.confirm(channel, prompt: prompt)
 
 ### Step 3: Escalate
 
-Next, we need to implement Step 3. Sym's standard library exposes a `iam` module which you can import. Let's put that import at the op of our file.
+Next, we need to implement Step 3. Sym's standard library exposes a `iam` module which you can import. Let's put that import at the top of our file.
 
 ```symflow
 import iam

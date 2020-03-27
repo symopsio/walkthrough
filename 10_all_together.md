@@ -10,7 +10,7 @@ $ aws cloudtrail get-trail-status --name symdemo
 An error occurred (TrailNotFoundException) when calling the GetTrailStatus operation: Unknown trail: arn:aws:cloudtrail:us-east-2:999999999:trail/symdemo for the user: 999999999
 ```
 
-Look's like, as expected, we don't have access to that trail.
+Looks like, as expected, we don't have access to that trail.
 
 Now, let's run our script to kick off a request via Sym.
 
@@ -49,7 +49,7 @@ Received 1 `setenv`!
 
 The AWS_SESSION_TOKEN environment variable has been set. You can now use the AWS CLI with the `SymDemoEscalated` Role.
 
-If you need to use the AWS Console with this Role, please visit the following link: https://signin.aws.amazon.com/xxx
+If you need to use the AWS Console with this Role, please visit the following link: https://signin.aws.amazon.com/?token=xxx
 ```
 
 Awesome, it worked! Let's test it out with the AWS CLI.
