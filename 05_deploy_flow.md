@@ -36,7 +36,7 @@ $ sym flow status demo --format=json
 
 Uh-oh! Notice how the `subscriptions` array is empty? That means there's no way to trigger our `hello` flow!
 
-Subscriptions are we let the Sym Runtime know to execute a flow based on an Event. The syntax for a subscription is a simple annotation: `@poll`. Let's try adding this to our `hello` flow in `demo.symflow`, passing in the name of the `CLOUDTRAIL_ACCESS_REQUEST` Event that we created earlier.
+Subscriptions are how we let the Sym Runtime know to execute a flow based on an Event. The syntax for a subscription is a simple annotation: `@poll`. Let's try adding this to our `hello` flow in `demo.symflow`, passing in the name of the `CLOUDTRAIL_ACCESS_REQUEST` Event that we created earlier.
 
 ```symflow
 @poll('CLOUDTRAIL_ACCESS_REQUEST')
