@@ -7,9 +7,9 @@ To make things quicker later on, we'll create a little script to emit this event
 ```bash
 #!/bin/bash
 
-TRAIL_ARN="arn:aws:cloudtrail:us-east-1:999999999:trail/symdemo"
+BUCKET_ARN="arn:aws:s3:us-east-1:999999999:symdemo"
 
-UUID=$(sym event create --flow=demo --name=CLOUDTRAIL_ACCESS_REQUEST --trail_arn=$TRAIL_ARN)
+UUID=$(sym event create --flow=demo --name=BUCKET_ACCESS_REQUEST --bucket_arn=$BUCKET_ARN)
 
 sym event status $UUID --format=json
 ```
@@ -25,8 +25,8 @@ $ ./request.sh
 ```json
 {
   "type": "event",
-  "name": "CLOUDTRAIL_ACCESS_REQUEST",
-  "fqn": "event:symops:yasyfm:demo:CLOUDTRAIL_ACCESS_REQUEST",
+  "name": "BUCKET_ACCESS_REQUEST",
+  "fqn": "event:symops:yasyfm:demo:BUCKET_ACCESS_REQUEST",
   "created_at": "2020-03-27T05:35:23",
   "uuid": "1830FD4C-2992-4083-B7EC-B0BE644EFC11"
 }

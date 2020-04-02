@@ -1,8 +1,8 @@
 # Setup
 
-To follow this tutorial, you'll need a CloudTrail trail named `symdemo` set up. You'll also need an IAM role, `SymDemoEscalated`, which provides exclusive access to the trail.
+To follow this tutorial, you'll need an S3 bucket named `symdemo` set up. You'll also need an IAM role, `SymDemoEscalated`, which provides exclusive read access to the bucket.
 
-For the purposes of the demo, we'll assume the ARN for the trail is `arn:aws:cloudtrail:us-east-1:999999999:trail/symdemo`.
+For the purposes of the demo, we'll assume the ARN for the bucket is `arn:aws:s3:us-east-1:999999999:symdemo`.
 
 We will also assume that you've already set up Sym at your organization, and that users are federated through your IDP, via the Sym Users service.
 

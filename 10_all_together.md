@@ -1,16 +1,16 @@
 # Putting It All Together!
 
-Let's first verify that we can't currently access the trail.
+Let's first verify that we can't currently access the bucket.
 
 ```bash
-$ aws cloudtrail get-trail-status --name symdemo
+$ aws s3 ls symdemo
 ```
 
 ```
-An error occurred (TrailNotFoundException) when calling the GetTrailStatus operation: Unknown trail: arn:aws:cloudtrail:us-east-2:999999999:trail/symdemo for the user: 999999999
+An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Access Denied
 ```
 
-Looks like, as expected, we don't have access to that trail.
+Looks like, as expected, we don't have access to that bucket.
 
 Now, let's run our script to kick off a request via Sym.
 
@@ -21,8 +21,8 @@ $ ./request.sh
 ```json
 {
   "type": "event",
-  "name": "CLOUDTRAIL_ACCESS_REQUEST",
-  "fqn": "event:symops:yasyfm:demo:CLOUDTRAIL_ACCESS_REQUEST",
+  "name": "BUCKET_ACCESS_REQUEST",
+  "fqn": "event:symops:yasyfm:demo:BUCKET_ACCESS_REQUEST",
   "created_at": "2020-03-27T05:35:23",
   "uuid": "6A76A214-586B-4C63-960F-392650416796"
 }
@@ -55,26 +55,15 @@ If you need to use the AWS Console with this Role, please visit the following li
 Awesome, it worked! Let's test it out with the AWS CLI.
 
 ```bash
-$ aws cloudtrail get-trail-status --name symdemo
+$ aws s3 ls symdemo
 ```
 
-```json
-{
-  "LatestNotificationTime": 1454022144.869,
-  "LatestNotificationAttemptSucceeded": "2020-01-28T23:02:24Z",
-  "LatestDeliveryAttemptTime": "2020-01-28T23:02:24Z",
-  "LatestDeliveryTime": 1454022144.869,
-  "TimeLoggingStarted": "2015-11-06T18:36:38Z",
-  "LatestDeliveryAttemptSucceeded": "2020-01-28T23:02:24Z",
-  "IsLogging": true,
-  "LatestCloudWatchLogsDeliveryTime": 1454022144.918,
-  "StartLoggingTime": 1446834998.695,
-  "StopLoggingTime": 1446834996.933,
-  "LatestNotificationAttemptTime": "2020-01-28T23:02:24Z",
-  "TimeLoggingStopped": "2015-11-06T18:36:36Z"
-}
+```
+2019-08-08 10:14:20      91503 access.log
+2019-08-08 10:14:26   13110282 application.log
+2019-06-07 12:46:08       5017 error.log
 ```
 
-Success! We can now use commands such as `aws cloudtrail lookup-events` to dive into the logs.
+Success! We can now use commands such as `aws s3 cp` to download and dive into the logs.
 
 **[Next: Up next](11_up_next.md)**

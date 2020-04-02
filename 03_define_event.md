@@ -13,12 +13,12 @@ $ cat demo/events.yml
       type: string
 ```
 
-This is a Sym Event definition. Events are messages that are sent around the Sym Runtime in response to triggers such as an API call, a cron schedule, a user action, or an event in a third-party system (via an integration). Let's define a simple `CLOUDTRAIL_ACCESS_REQUEST` event by changing the file to the following.
+This is a Sym Event definition. Events are messages that are sent around the Sym Runtime in response to triggers such as an API call, a cron schedule, a user action, or an event in a third-party system (via an integration). Let's define a simple `BUCKET_ACCESS_REQUEST` event by changing the file to the following.
 
 ```yaml
-- name: CLOUDTRAIL_ACCESS_REQUEST
+- name: BUCKET_ACCESS_REQUEST
   inputs:
-    - name: trail_arn
+    - name: bucket_arn
       type: "aws:arn"
 ```
 

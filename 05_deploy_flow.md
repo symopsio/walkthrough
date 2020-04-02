@@ -10,7 +10,7 @@ $ sym flow deploy demo
 Checking for an existing flow...❌
 Creating a new flow named "yasyfm:demo"...✅
 Checking for new events...✅
-Creating new event "CLOUDTRAIL_ACCESS_REQUEST"...✅
+Creating new event "BUCKET_ACCESS_REQUEST"...✅
 Checking for a new flow definition...✅
 Uploading "demo.symflow"...✅
 Deploy of "demo" flow succeeded!
@@ -36,16 +36,16 @@ $ sym flow status demo --format=json
 
 Uh-oh! Notice how the `subscriptions` array is empty? That means there's no way to trigger our `hello` flow!
 
-Subscriptions are how we let the Sym Runtime know to execute a flow based on an Event. The syntax for a subscription is a simple annotation: `@poll`. Let's try adding this to our `hello` flow in `demo.symflow`, passing in the name of the `CLOUDTRAIL_ACCESS_REQUEST` Event that we created earlier.
+Subscriptions are how we let the Sym Runtime know to execute a flow based on an Event. The syntax for a subscription is a simple annotation: `@subscribe`. Let's try adding this to our `hello` flow in `demo.symflow`, passing in the name of the `BUCKET_ACCESS_REQUEST` Event that we created earlier.
 
 ```symflow
-@poll('CLOUDTRAIL_ACCESS_REQUEST')
+@subscribe('BUCKET_ACCESS_REQUEST')
 flow hello
   ...
 end
 ```
 
-Let's deploy our flow again, and make sure our `@poll` worked.
+Let's deploy our flow again, and make sure our `subscribe` worked.
 
 ```bash
 $ sym flow deploy demo
@@ -73,7 +73,7 @@ $ sym flow status demo --format=json
   "last_update": "2020-03-27T05:35:00",
   "status": "ready",
   "flows": ["hello"],
-  "subscriptions": ["poll:CLOUDTRAIL_ACCESS_REQUEST"]
+  "subscriptions": ["poll:BUCKET_ACCESS_REQUEST"]
 }
 ```
 
