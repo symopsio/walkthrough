@@ -30,7 +30,8 @@ $ sym flow status demo --format=json
   "last_update": "2020-03-27T05:30:43",
   "status": "ready",
   "flows": ["hello"],
-  "subscriptions": []
+  "subscriptions": [],
+  "configs": []
 }
 ```
 
@@ -73,7 +74,8 @@ $ sym flow status demo --format=json
   "last_update": "2020-03-27T05:35:00",
   "status": "ready",
   "flows": ["hello"],
-  "subscriptions": ["poll:BUCKET_ACCESS_REQUEST"]
+  "subscriptions": ["poll:BUCKET_ACCESS_REQUEST"],
+  "configs": []
 }
 ```
 

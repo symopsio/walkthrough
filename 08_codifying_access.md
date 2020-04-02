@@ -22,8 +22,10 @@ arn = g.context.inputs.bucket_arn
 
 Sym Config allows us to read arbitrary strings as config values from our workflows. We can access Config by calling `g.config.key`. Let's assume we have a config called `channel` with the name of our Slack channel; we'll look at how to set that value later.
 
+The bang operator (`!`) asserts that a value is defined. Adding this to our variable definition allows Sym to perform static analysis and ensure that the config value is set when the workflow is deployed.
+
 ```symflow
-channel = g.config.channel
+channel = g.config.channel!
 ```
 
 Instead of a `message`, `io.confirm` takes a `prompt`. Let's have the prompt in this case be: "NAME would like to access the bucket ARN.".
@@ -69,7 +71,7 @@ alias user = g.context.user
 @subscribe('BUCKET_ACCESS_REQUEST')
 flow hello
   arn = g.context.inputs.bucket_arn
-  channel = g.config.channel
+  channel = g.config.channel!
   prompt = `#{user.name} would like to access the bucket #{arn}`
   io.confirm(channel, prompt: prompt)
 

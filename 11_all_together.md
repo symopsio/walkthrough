@@ -1,5 +1,7 @@
 # Putting It All Together!
 
+## Check Access
+
 Let's first verify that we can't currently access the bucket.
 
 ```bash
@@ -11,6 +13,43 @@ An error occurred (AccessDenied) when calling the ListObjectsV2 operation: Acces
 ```
 
 Looks like, as expected, we don't have access to that bucket.
+
+## Deploy
+
+Next, let's deploy our codified access workflow.
+
+```bash
+$ sym flow deploy demo
+```
+
+```
+Checking for an existing flow...✅
+Found flow "yasyfm:demo"!
+Downloading current spec for "yasyfm:demo"...✅
+Checking for new events...✅
+No new events found!
+Checking for a new flow definition...✅
+Uploading "demo.symflow"...✅
+Deploy of "demo" flow succeeded!
+```
+
+```bash
+$ sym flow status demo --format=json
+```
+
+```json
+{
+  "name": "demo",
+  "fqn": "flow:symops:yasyfm:demo",
+  "last_update": "2020-03-27T05:35:00",
+  "status": "ready",
+  "flows": ["hello"],
+  "subscriptions": ["poll:BUCKET_ACCESS_REQUEST"],
+  "configs": ["channel"]
+}
+```
+
+## Make Request
 
 Now, let's run our script to kick off a request via Sym.
 
@@ -39,6 +78,8 @@ At this point, we should see a Slack message in the `#eng` channel, requesting a
 
 ![Slack Approval](img/approve.png)
 
+## Approve
+
 Click "Approve", then tune back in to your terminal.
 
 ```
@@ -53,6 +94,8 @@ If you need to use the AWS Console with this Role, please visit the following li
 ```
 
 Awesome, it worked! Let's test it out with the AWS CLI.
+
+## Verify Access
 
 ```bash
 $ aws s3 ls symdemo
