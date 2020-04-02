@@ -28,10 +28,10 @@ MFA Token: ******
 Success! Welcome, Yasyf. 🤓
 ```
 
-Next, let's create a new Sym Workflow called `demo`.
+Next, let's create a new Sym Workflow called `demo`. We'll use the `hello-world` template: one of many Sym-provided templates to explore.
 
 ```bash
-sym flow new demo
+sym flow new demo --template=hello-world
 ```
 
 You'll notice that this creates a `demo` directory with two files: `events.yml` and `demo.symflow`.
