@@ -1,6 +1,6 @@
 # Triggering Events
 
-Let's test our our new subscription, by triggering an Event from the CLI, which will hit the Sym API.
+Let's test our our new subscription, by triggering an Event from the CLI, which will hit the Sym API. This should cause our `hello` flow run, resulting in us receiving a DM in Slack (from our `io.say`)!
 
 To make things quicker later on, we'll create a little script to emit this event. Put the following in a script called `request.sh` and make it executable.
 
