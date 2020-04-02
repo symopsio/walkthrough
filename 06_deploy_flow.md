@@ -79,4 +79,4 @@ $ sym flow status demo --format=json
 
 Nice! We're killing it.
 
-**[Next: Triggering Events](06_triggering_events.md)**
+**[Next: Triggering Events](07_triggering_events.md)**

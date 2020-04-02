@@ -66,4 +66,4 @@ $ aws s3 ls symdemo
 
 Success! We can now use commands such as `aws s3 cp` to download and dive into the logs.
 
-**[Next: Up next](11_up_next.md)**
+**[Next: Up next](12_up_next.md)**

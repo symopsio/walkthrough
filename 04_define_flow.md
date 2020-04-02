@@ -54,4 +54,4 @@ In our starter file, we see a simple "Hello, World" flow which uses the `io` mod
 
 Since the Sym Slack Bot automatically provides an `io` location to the Sym Users service, and there is no terminal waiting for output, this message will go to the `user` via a Slack DM. Later, we will explore how to attach a terminal to a workflow triggered by an Event, so as to receive output locally.
 
-**[Next: Deploying Your Workflow](05_deploy_flow.md)**
+**[Next: Testing your Workflow](05_test_flow.md)**

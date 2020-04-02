@@ -15,4 +15,4 @@ $ sym config set --flow=demo --key=channel --value="#eng"
 }
 ```
 
-**[Next: Offering a Terminal Interface](09_terminal_interface.md)**
+**[Next: Offering a Terminal Interface](10_terminal_interface.md)**

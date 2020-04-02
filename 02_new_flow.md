@@ -20,7 +20,7 @@ $ sym login
 ```
 
 ```
-Org Slug: symops
+Sym Org: symops
 Username: yasyfm
 Password: ************
 MFA Token: ******

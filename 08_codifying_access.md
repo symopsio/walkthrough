@@ -80,4 +80,4 @@ end
 
 Alright, almost done! Two steps left.
 
-**[Next: Setting a Config Value](08_setting_config.md)**
+**[Next: Setting a Config Value](09_setting_config.md)**

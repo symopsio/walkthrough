@@ -36,4 +36,4 @@ If everything worked, the event was emitted, and you should now have a Slack DM 
 
 ![Hello From Sym](img/hello.png)
 
-**[Next: Codifying an Access Workflow](07_codifying_access.md)**
+**[Next: Codifying an Access Workflow](08_codifying_access.md)**
