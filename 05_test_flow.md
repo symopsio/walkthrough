@@ -11,7 +11,7 @@ import g, t
 
 # @test:description The user is greeted
 test hello
-  t.expect_output(g.context.user, body: "Hello, Yasyf!")
+  t.expect_output(g.context.user, body: "Hello, Yasyf Mohamedali!")
 end
 ```
 
@@ -33,7 +33,7 @@ Running tests in "demo.symflow.test"...
 Running 1/1 test for "hello"...
 ❌The user is greeted
 
-Channel `User (Ben Bitdiddle)` received output, but that output ("Hello, Ben!") did not match what was expected ("Hello, Yasyf!")
+Channel `User (Ben Bitdiddle)` received output, but that output ("Hello, Ben Bitdiddle!") did not match what was expected ("Hello, Yasyf Mohamedali!")
 ```
 
 Whoops! Without overriding the user's name, we get the default test value, which will not match our test. We could change the expected value to a regular expression that would match any name, but let's instead explore how to change the injected test data.
@@ -41,7 +41,7 @@ Whoops! Without overriding the user's name, we get the default test value, which
 To inject a custom name for our test user, we simply use the `--context` CLI flag, passing in a JSON object to be merged into the default data.
 
 ```bash
-CONTEXT='{"user": {"first_name": "Yasyf"}}'
+CONTEXT='{"user": {"first_name": "Yasyf", last_name: "Mohamedali"}}'
 sym flow test demo --context=$CONTEXT
 ```
 
@@ -64,7 +64,7 @@ sym flow run demo --flow=hello --context=$CONTEXT
 
 ```
 Running flow "hello" in "demo.symflow"...
-> Hello, Yasyf!
+> Hello, Yasyf Mohamedali!
 ```
 
 **[Next: Deploying Your Workflow](06_deploy_flow.md)**
