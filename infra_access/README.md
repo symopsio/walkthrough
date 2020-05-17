@@ -8,7 +8,11 @@ Analytics Account: UA-156651818-3
 ## Welcome
 Duration: 2:00
 
-Hey! I'm [Yasyf](https://twitter.com/yasyf), CEO at [Sym](https://www.symops.io/). Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow.
+Hey! I'm [Yasyf](https://twitter.com/yasyf), CEO at [Sym](https://www.symops.io/). Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow. If you want to learn more about how Sym can help you accomplish your compliance goals, please check out our [product overview datasheet](https://docsend.com/view/msq7gw6z94rnjjf8).
+
+![Sym Overview](img/overview.png)
+
+### Context
 
 Let's set up our use case. I'm an engineer at Healthy Health, a 100 person healthtech startup. We integrate with health systems, and in the process end up with lots of patient PHI, so we have to be HIPAA-compliant. Additionally, our customers require that we pass annual SOC 2 Type 2 audits, as well as routine vendor security assessments.
 
@@ -17,6 +21,8 @@ To increase the security and audibility of infrastructure access at Healthy Heal
 - **HIPAA Privacy Rule**: Minimum Necessary Requirement
 - **HIPAA Security Rule**: Access Authorization, Unique User Identification, Automatic Logoff
 -  **SOC 2**: Common Controls 4 (Monitoring Activities) and 6 (Logical and Physical Address)
+
+### Workflow
 
 Without Sym, we might decide to implement our approval and access workflow using JIRA tickets, and a single task queue that is owned by the SecOps team. This would require SecOps to manually review requests, escalate engineers, and revoke privileges at a later date. Such a workflow is prone to long turnaround times for engineers, wasted time for ops, and access drift as a result of forgotten grants.
 

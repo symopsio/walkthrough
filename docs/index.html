@@ -28,7 +28,9 @@
                   feedback-link="mailto:founders@symops.io">
     
       <google-codelab-step label="Welcome" duration="2">
-        <p>Hey! I&#39;m <a href="https://twitter.com/yasyf" target="_blank">Yasyf</a>, CEO at <a href="https://www.symops.io/" target="_blank">Sym</a>. Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow.</p>
+        <p>Hey! I&#39;m <a href="https://twitter.com/yasyf" target="_blank">Yasyf</a>, CEO at <a href="https://www.symops.io/" target="_blank">Sym</a>. Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow. If you want to learn more about how Sym can help you accomplish your compliance goals, please check out our <a href="https://docsend.com/view/msq7gw6z94rnjjf8" target="_blank">product overview datasheet</a>.</p>
+<p class="image-container"><img alt="Sym Overview" src="img/70cb726549efb632.png"></p>
+<h2 is-upgraded>Context</h2>
 <p>Let&#39;s set up our use case. I&#39;m an engineer at Healthy Health, a 100 person healthtech startup. We integrate with health systems, and in the process end up with lots of patient PHI, so we have to be HIPAA-compliant. Additionally, our customers require that we pass annual SOC 2 Type 2 audits, as well as routine vendor security assessments.</p>
 <p>To increase the security and audibility of infrastructure access at Healthy Health, we&#39;ve decided to put a peer-approval process around sensitive resources, with a low default access level, and short grants of escalated privileges upon approval. This happens to satisfy many of our compliance requirements, namely:</p>
 <ul>
@@ -36,6 +38,7 @@
 <li><strong>HIPAA Security Rule</strong>: Access Authorization, Unique User Identification, Automatic Logoff</li>
 <li><strong>SOC 2</strong>: Common Controls 4 (Monitoring Activities) and 6 (Logical and Physical Address)</li>
 </ul>
+<h2 is-upgraded>Workflow</h2>
 <p>Without Sym, we might decide to implement our approval and access workflow using JIRA tickets, and a single task queue that is owned by the SecOps team. This would require SecOps to manually review requests, escalate engineers, and revoke privileges at a later date. Such a workflow is prone to long turnaround times for engineers, wasted time for ops, and access drift as a result of forgotten grants.</p>
 <p>With Sym, we can easily implement a compliant policy that distributes approvals and gets engineers short-lived access in seconds, while keeping ops out of the loop.</p>
 <p>When you&#39;re done with this tutorial, you&#39;ll have a smooth approval flow that you can initiate from your command line, with approvals granted via a message in a Slack channel, and fully-automated privilege escalations.</p>
