@@ -359,12 +359,12 @@ For example, by default, your user will stay in the escalated group for one hour
 Negative
 : **TODO: Write me**
 
-## Hook Example: Dynamic Expiration
+## Dynamic Expiration
 
 Negative
 : **TODO: Write me**
 
-## Hook Example: Auto-Escalation via PagerDuty
+## Auto-Escalation (PagerDuty)
 
 Negative
 : **TODO: Write me**
