@@ -1,10 +1,12 @@
 ID: infra_access
 Summary: Sym Workflows turn tedious, manual compliance processes into executable workflow definitions that your ops teams can manage as code.
 Feedback Link: mailto:founders@symops.io
+Analytics Account: UA-156651818-3
 
 # Sym Workflows: Infrastructure Access
 
 ## Welcome
+Duration: 2:00
 
 Hey! I'm [Yasyf](https://twitter.com/yasyf), CEO at [Sym](https://www.symops.io/). Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow.
 
@@ -25,6 +27,7 @@ When you're done with this tutorial, you'll have a smooth approval flow that you
 If you'd rather jump straight into the code, you can find it on GitHub at [symopsio/docs](https://github.com/symopsio/docs/tree/master/infra_access).
 
 ## Environment Setup
+Duration: 3:00
 
 For the purposes of this tutorial, we'll assume that your company has already set up Sym at an organizational level. This includes integrating with your IDP to obtain a user mapping.
 
@@ -35,6 +38,7 @@ You'll also need an escalation strategy. An escalation strategy is how we tell S
 If you'd like to play around with connecting Okta with IAM for SSH, you should check out our [`terraform-okta-ssm-modules`](https://github.com/symopsio/terraform-okta-ssm-modules) posts.
 
 ## AWS IAM Setup
+Duration: 5:00
 
 Positive
 : *You can skip this step if you already have an escalation strategy in place.*
@@ -44,7 +48,12 @@ Let's create a sample escalation strategy for use in this tutorial. Please login
 1. Create an IAM Role named `SymDemoEscalated`.
 2. In your terminal, run `aws iam get-role --role-name SymDemoEscalated`.
    Note the `RoleId`, which should begin with `AROA`.
-3. Create an S3 bucket named `SymDemo-YourNameHere`, and attach the following policy, which restricts access to the `SymDemoEscalated` Role.
+3. Create an S3 bucket named `SymDemo-YourNameHere`, and attach the below **S3 Bucket Policy**, which restricts access to the `SymDemoEscalated` Role.
+4. Create an IAM Group, `SymDemoAdmins`, and attach the below **IAM Group Policy**, which allows the group to assume the `SymDemoEscalated` Role.
+
+Now, the only users who will be able to access our S3 bucket are the ones in the `SymDemoAdmins` IAM Group! This group will be our escalation strategy.
+
+#### S3 Bucket Policy
 
 ```json
 {
@@ -70,25 +79,23 @@ Let's create a sample escalation strategy for use in this tutorial. Please login
 }
 ```
 
-4. Create an IAM Group, `SymDemoAdmins`, and attach the following policy, which allows the group to assume the `SymDemoEscalated` Role.
+#### IAM Group Policy
 
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": "sts:AssumeRole",
-        "Resource": "arn:aws:iam::ACCOUNT-ID:role/SymDemoEscalated"
-      }
-    ]
-}
-```
-
-Now, the only users who will be able to access our S3 bucket are the ones in the `SymDemoAdmins` IAM Group. This group will be our escalation strategy.
-
+ ```json
+ {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": "sts:AssumeRole",
+         "Resource": "arn:aws:iam::ACCOUNT-ID:role/SymDemoEscalated"
+       }
+     ]
+ }
+ ```
 
 ## Creating a New Workflow
+Duration: 2:00
 
 Let's first install the Sym CLI helper.
 
@@ -127,6 +134,7 @@ sym flow new infra_access --template=hello-world
 You'll notice that this creates a `infra_access` directory with two files: `infra_access.tf` and `infra_access.py`. The Terraform file is where we will declare the resources and configuration for this workflow, and the Python file is where we will put our custom workflow logic.
 
 ## Terraform Config
+Duration: 5:00
 
 Let's take a look at `infra_access.tf`.
 
@@ -169,6 +177,7 @@ The `handler` can also optionally specify `hooks`: a file with code that modifie
 The `params` key supplies the declarative parameters for our workflow. The `sym:approval` template defines one required parameter, `strategies`, which provides the configuration for your escalation strategies. We will add a strategy here after exploring the `hooks`.
 
 ## Hooks, Reducers, & Actions
+Duration: 5:00
 
 Workflows in Sym are composed of a series of pre-defined steps. Sym has three imperative mechanisms for modifying the logic of a workflow: `@hook`, `@reducer`, and `@action`.
 
@@ -216,6 +225,7 @@ def after_prompt(event):
 As we expected, the hooks and actions are optional, but we are missing a required implementation for the `get_approver` hook. This makes sense—Sym needs to know where to route access requests!
 
 ## Implementing a Reducer
+Duration: 3:00
 
 Let's go ahead and implement `get_approver`. For the purposes of this demo, let's keep it simple and assume that we're okay with anyone on the Engineering team approving access requests.
 
@@ -233,6 +243,7 @@ Negative
 : **TODO: Okta group example**
 
 ## Escalation Strategies
+Duration: 3:00
 
 Let's hop back over to our `infra_access.tf` file.
 
@@ -254,6 +265,7 @@ Negative
 : **TODO: Okta & Lambda example**
 
 ## Validating a Workflow
+Duration: 2:00
 
 There are two steps to validating your workflow locally. First, we can validate our Terraform config.
 
@@ -279,6 +291,7 @@ $ sym validate
 ```
 
 ## Testing a Workflow
+Duration: 5:00
 
 Sym integrates with Python's `unittest` library to allow for easy testing of workflows.
 
@@ -286,6 +299,7 @@ Negative
 : **TODO: Write me**
 
 ## Deploying a Workflow
+Duration: 3:00
 
 Deploying a workflow with Sym's Terraform provider is simple: just run `terraform init && terraform apply`.
 
@@ -295,6 +309,7 @@ Negative
 : **TODO: output of `terraform apply`**
 
 ## Triggering a Workflow
+Duration: 3:00
 
 We can test our new workflow by using the Sym CLI to create an event in the Sym API. This will cause `infra_access` to run end-to-end, so get ready to check Slack!
 

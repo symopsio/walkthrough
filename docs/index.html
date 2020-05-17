@@ -21,13 +21,13 @@
 </head>
 <body>
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
-  <google-codelab codelab-gaid=""
+  <google-codelab codelab-gaid="UA-156651818-3"
                   id="infra_access"
                   title="Sym Workflows: Infrastructure Access"
                   environment="web"
                   feedback-link="mailto:founders@symops.io">
     
-      <google-codelab-step label="Welcome" duration="0">
+      <google-codelab-step label="Welcome" duration="2">
         <p>Hey! I&#39;m <a href="https://twitter.com/yasyf" target="_blank">Yasyf</a>, CEO at <a href="https://www.symops.io/" target="_blank">Sym</a>. Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow.</p>
 <p>Let&#39;s set up our use case. I&#39;m an engineer at Healthy Health, a 100 person healthtech startup. We integrate with health systems, and in the process end up with lots of patient PHI, so we have to be HIPAA-compliant. Additionally, our customers require that we pass annual SOC 2 Type 2 audits, as well as routine vendor security assessments.</p>
 <p>To increase the security and audibility of infrastructure access at Healthy Health, we&#39;ve decided to put a peer-approval process around sensitive resources, with a low default access level, and short grants of escalated privileges upon approval. This happens to satisfy many of our compliance requirements, namely:</p>
@@ -44,7 +44,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Environment Setup" duration="0">
+      <google-codelab-step label="Environment Setup" duration="3">
         <p>For the purposes of this tutorial, we&#39;ll assume that your company has already set up Sym at an organizational level. This includes integrating with your IDP to obtain a user mapping.</p>
 <p>To complete this tutorial, you should <a href="https://learn.hashicorp.com/terraform/getting-started/install" target="_blank">install Terraform</a>, and make sure you have a working install of Python 3.</p>
 <p>You&#39;ll also need an escalation strategy. An escalation strategy is how we tell Sym what to do when an access request has been approved. The easiest way to get Sym up and running is to have an AWS IAM Group whose members can assume a privileged role. We&#39;ll walk you through this if you don&#39;t already have it set up. Sym also supports escalation via Okta, and any custom lambda via our <a href="https://github.com/symopsio/serverless-templates" target="_blank">Serverless Templates</a>.</p>
@@ -53,15 +53,18 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="AWS IAM Setup" duration="0">
+      <google-codelab-step label="AWS IAM Setup" duration="5">
         <aside class="special"><p><em>You can skip this step if you already have an escalation strategy in place.</em></p>
 </aside>
 <p>Let&#39;s create a sample escalation strategy for use in this tutorial. Please login to the AWS Console and complete the following steps.</p>
 <ol type="1">
 <li>Create an IAM Role named <code>SymDemoEscalated</code>.</li>
 <li>In your terminal, run <code>aws iam get-role --role-name SymDemoEscalated</code>.<br>Note the <code>RoleId</code>, which should begin with <code>AROA</code>.</li>
-<li>Create an S3 bucket named <code>SymDemo-YourNameHere</code>, and attach the following policy, which restricts access to the <code>SymDemoEscalated</code> Role.</li>
+<li>Create an S3 bucket named <code>SymDemo-YourNameHere</code>, and attach the below <strong>S3 Bucket Policy</strong>, which restricts access to the <code>SymDemoEscalated</code> Role.</li>
+<li>Create an IAM Group, <code>SymDemoAdmins</code>, and attach the below <strong>IAM Group Policy</strong>, which allows the group to assume the <code>SymDemoEscalated</code> Role.</li>
 </ol>
+<p>Now, the only users who will be able to access our S3 bucket are the ones in the <code>SymDemoAdmins</code> IAM Group! This group will be our escalation strategy.</p>
+<h3 is-upgraded>S3 Bucket Policy</h3>
 <pre><code>{
   &#34;Version&#34;: &#34;2012-10-17&#34;,
   &#34;Statement&#34;: [
@@ -84,26 +87,23 @@
   ]
 }
 </code></pre>
-<ol type="1">
-<li>Create an IAM Group, <code>SymDemoAdmins</code>, and attach the following policy, which allows the group to assume the <code>SymDemoEscalated</code> Role.</li>
-</ol>
-<pre><code>{
-    &#34;Version&#34;: &#34;2012-10-17&#34;,
-    &#34;Statement&#34;: [
-      {
-        &#34;Effect&#34;: &#34;Allow&#34;,
-        &#34;Action&#34;: &#34;sts:AssumeRole&#34;,
-        &#34;Resource&#34;: &#34;arn:aws:iam::ACCOUNT-ID:role/SymDemoEscalated&#34;
-      }
-    ]
-}
+<h3 is-upgraded>IAM Group Policy</h3>
+<pre><code> {
+     &#34;Version&#34;: &#34;2012-10-17&#34;,
+     &#34;Statement&#34;: [
+       {
+         &#34;Effect&#34;: &#34;Allow&#34;,
+         &#34;Action&#34;: &#34;sts:AssumeRole&#34;,
+         &#34;Resource&#34;: &#34;arn:aws:iam::ACCOUNT-ID:role/SymDemoEscalated&#34;
+       }
+     ]
+ }
 </code></pre>
-<p>Now, the only users who will be able to access our S3 bucket are the ones in the <code>SymDemoAdmins</code> IAM Group. This group will be our escalation strategy.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Creating a New Workflow" duration="0">
+      <google-codelab-step label="Creating a New Workflow" duration="2">
         <p>Let&#39;s first install the Sym CLI helper.</p>
 <pre><code>$ brew install sym
 </code></pre>
@@ -130,7 +130,7 @@ Success! Welcome, Yasyf. 🤓
 
       </google-codelab-step>
     
-      <google-codelab-step label="Terraform Config" duration="0">
+      <google-codelab-step label="Terraform Config" duration="5">
         <p>Let&#39;s take a look at <code>infra_access.tf</code>.</p>
 <aside class="special"><p>You can modify this file in your browser by launching a <a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fsymopsio%2Fdocs&cloudshell_open_in_editor=infra_access.tf&cloudshell_working_dir=infra_access&cloudshell_tutorial=README.md" target="_blank">Google Cloud Shell</a>.</p>
 </aside>
@@ -164,7 +164,7 @@ resource &#34;sym_strategies&#34; &#34;escalation_strategies&#34; {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Hooks, Reducers, &amp; Actions" duration="0">
+      <google-codelab-step label="Hooks, Reducers, &amp; Actions" duration="5">
         <p>Workflows in Sym are composed of a series of pre-defined steps. Sym has three imperative mechanisms for modifying the logic of a workflow: <code>@hook</code>, <code>@reducer</code>, and <code>@action</code>.</p>
 <ul>
 <li><code>hooks</code> occur <em>before</em> key steps of the workflow, and offer the opportunity to bypass, short-circuit, or alter the flow of steps, by emitting <code>events</code>.</li>
@@ -208,7 +208,7 @@ def after_prompt(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Implementing a Reducer" duration="0">
+      <google-codelab-step label="Implementing a Reducer" duration="3">
         <p>Let&#39;s go ahead and implement <code>get_approver</code>. For the purposes of this demo, let&#39;s keep it simple and assume that we&#39;re okay with anyone on the Engineering team approving access requests.</p>
 <pre><code>from sym import slack
 
@@ -223,7 +223,7 @@ def get_approver(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Escalation Strategies" duration="0">
+      <google-codelab-step label="Escalation Strategies" duration="3">
         <p>Let&#39;s hop back over to our <code>infra_access.tf</code> file.</p>
 <p>In the <code>escalation_strategies</code> block, let&#39;s add a <code>aws_strategy</code> which allows the user to escalate via the IAM Group (<code>SymDemoAdmins</code>) we set up earlier.</p>
 <pre><code>resource &#34;sym_strategies&#34; &#34;escalation_strategies&#34; {
@@ -241,7 +241,7 @@ def get_approver(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Validating a Workflow" duration="0">
+      <google-codelab-step label="Validating a Workflow" duration="2">
         <p>There are two steps to validating your workflow locally. First, we can validate our Terraform config.</p>
 <pre><code>$ terraform validate
 </code></pre>
@@ -258,7 +258,7 @@ def get_approver(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Testing a Workflow" duration="0">
+      <google-codelab-step label="Testing a Workflow" duration="5">
         <p>Sym integrates with Python&#39;s <code>unittest</code> library to allow for easy testing of workflows.</p>
 <aside class="warning"><p><strong>TODO: Write me</strong></p>
 </aside>
@@ -266,7 +266,7 @@ def get_approver(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Deploying a Workflow" duration="0">
+      <google-codelab-step label="Deploying a Workflow" duration="3">
         <p>Deploying a workflow with Sym&#39;s Terraform provider is simple: just run <code>terraform init &amp;&amp; terraform apply</code>.</p>
 <p>Terraform will create a Workflow in Sym, and upload the config and Python code associated with it. It will also create a cross-account Role in your AWS account for Sym to assume in order to move users into and out of the <code>SymDemoAdmins</code> IAM Group. The ARN for this role will automatically be saved in Terraform&#39;s outputs, and sent to Sym.</p>
 <aside class="warning"><p><strong>TODO: output of </strong><code>terraform apply</code></p>
@@ -275,7 +275,7 @@ def get_approver(event):
 
       </google-codelab-step>
     
-      <google-codelab-step label="Triggering a Workflow" duration="0">
+      <google-codelab-step label="Triggering a Workflow" duration="3">
         <p>We can test our new workflow by using the Sym CLI to create an event in the Sym API. This will cause <code>infra_access</code> to run end-to-end, so get ready to check Slack!</p>
 <pre><code>sym flow trigger --name=infra_access
 </code></pre>
