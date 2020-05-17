@@ -1,0 +1,18 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-05-16T18:10:59-07:00",
+  "id": "infra_access",
+  "duration": 0,
+  "title": "Sym Workflows: Infrastructure Access",
+  "summary": "Sym Workflows turn tedious, manual compliance processes into executable workflow definitions that your ops teams can manage as code.",
+  "source": "../infra_access/README.md",
+  "theme": "",
+  "status": null,
+  "category": null,
+  "tags": [],
+  "feedback": "mailto:founders@symops.io",
+  "url": "infra_access"
+}
