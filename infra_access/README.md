@@ -352,7 +352,12 @@ Negative
 
 Nice, we did it! You've successfully completed the core of the tutorial. Read on if you want to explore some of Sym's more powerful features.
 
-For example, by default, your user will stay in the escalated group for one hour. Our next section walks through how to add an expiration field to the request modal, and use it in a reducer.
+For example, by default, your user will stay in the escalated group for one hour. Our later sections walk through how to add an expiration field to the request modal, and use it in a reducer.
+
+## Slack Shortcuts
+
+Negative
+: **TODO: Write me**
 
 ## Hook Example: Dynamic Expiration
 
@@ -360,11 +365,6 @@ Negative
 : **TODO: Write me**
 
 ## Hook Example: Auto-Escalation via PagerDuty
-
-Negative
-: **TODO: Write me**
-
-## Slack Shortcuts
 
 Negative
 : **TODO: Write me**
