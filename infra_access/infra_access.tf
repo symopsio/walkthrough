@@ -5,7 +5,7 @@ provider "sym" {
 resource "sym_flow" "infra_access" {
   handler = {
     parent = "sym:approval"
-    hooks = file("infra_access.py")
+    impl = file("infra_access.py")
   }
 
   meta = {

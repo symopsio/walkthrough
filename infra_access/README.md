@@ -22,7 +22,9 @@ With Sym, we can easily implement a compliant policy that distributes approvals 
 
 When you're done with this tutorial, you'll have a smooth approval flow that you can initiate from your command line, with approvals granted via a message in a Slack channel, and fully-automated privilege escalations.
 
-## Setup
+If you'd rather jump straight into the code, you can find it on GitHub at [symopsio/docs](https://github.com/symopsio/docs/tree/master/infra_access).
+
+## Environment Setup
 
 For the purposes of this tutorial, we'll assume that your company has already set up Sym at an organizational level. This includes integrating with your IDP to obtain a user mapping.
 
@@ -32,7 +34,7 @@ You'll also need an escalation strategy. An escalation strategy is how we tell S
 
 If you'd like to play around with connecting Okta with IAM for SSH, you should check out our [`terraform-okta-ssm-modules`](https://github.com/symopsio/terraform-okta-ssm-modules) posts.
 
-## Escalation Strategy
+## AWS IAM Setup
 
 Positive
 : *You can skip this step if you already have an escalation strategy in place.*
@@ -152,7 +154,7 @@ resource "sym_strategies" "escalation_strategies" {
 }
 ```
 
-The `sym` provider provides a `sym_flow` resource, which you can use to define a new Sym Workflow. There are two required keys, `handler` and `meta`.
+The `sym` provider provides a `sym_flow` resource, which you can use to define a new Sym Workflow. There are two required keys, `handler` and `params`.
 
 ### Handler
 
@@ -162,8 +164,192 @@ The `sym:approval` template gives the foundation for an approval workflow in Sym
 
 The `handler` can also optionally specify `hooks`: a file with code that modifies the steps of the workflow. Our `hooks` will be defined in the `infra_access.py` file, which we will explore in the next section.
 
-### Meta
+### Params
 
-The `meta` key supplies the declarative parameters for our workflow. The `sym:approval` template defines one required parameter, `strategies`, which provides the configuration for your escalation strategies. We will add a strategy here after exploring the `hooks`.
+The `params` key supplies the declarative parameters for our workflow. The `sym:approval` template defines one required parameter, `strategies`, which provides the configuration for your escalation strategies. We will add a strategy here after exploring the `hooks`.
 
-## Hooks
+## Hooks, Reducers, & Actions
+
+Workflows in Sym are composed of a series of pre-defined steps. Sym has three imperative mechanisms for modifying the logic of a workflow: `@hook`, `@reducer`, and `@action`.
+
+- **`hooks`** occur *before* key steps of the workflow, and offer the opportunity to bypass, short-circuit, or alter the flow of steps, by emitting `events`.
+- **`reducers`** take the current state of the workflow as input, and return a single value (whose type depends on the specific reducer) to a given step.
+- **`actions`** are opportunities to execute additional side effects *after* a step,
+
+The `sym:approval` template defines five steps (`prompt`, `request`, `approval`, `escalate`, `denial`), each with an `on_*` hook, and a `after_*` action. The template also defines one `reducer`, `get_approver`, which must be supplied.
+
+Let's take a look at `infra_access.py`.
+
+Positive
+: You can modify this file in your browser by launching a [Google Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fsymopsio%2Fdocs&cloudshell_open_in_editor=infra_access.py&cloudshell_working_dir=infra_access&cloudshell_tutorial=README.md).
+
+```python
+from sym.annotations import hook, action, reducer
+from sym import slack
+
+
+@reducer
+def get_approver(event):
+    raise NotImplementedError
+
+
+@hook
+def on_prompt(event):
+    """
+    Executed before the requesting user is prompted for details about their request.
+    """
+
+    pass
+
+
+@action
+def after_prompt(event):
+    """
+    Executed after the requesting user is prompted for details about their request.
+    """
+
+    pass
+
+...
+```
+
+As we expected, the hooks and actions are optional, but we are missing a required implementation for the `get_approver` hook. This makes sense—Sym needs to know where to route access requests!
+
+## Implementing a Reducer
+
+Let's go ahead and implement `get_approver`. For the purposes of this demo, let's keep it simple and assume that we're okay with anyone on the Engineering team approving access requests.
+
+```python
+from sym import slack
+
+@reducer
+def get_approver(event):
+    return slack.channel("#eng")
+```
+
+With this simple addition, we now only have one piece left for a working demo: the escalation strategy.
+
+Negative
+: **TODO: Okta group example**
+
+## Escalation Strategies
+
+Let's hop back over to our `infra_access.tf` file.
+
+In the `escalation_strategies` block, let's add a `aws_strategy` which allows the user to escalate via the IAM Group (`SymDemoAdmins`) we set up earlier.
+
+```terraform
+resource "sym_strategies" "escalation_strategies" {
+  aws_strategy {
+    id = "aws"
+    label = "AWS"
+    allowed_values = ["SymDemoAdmins"]
+  }
+}
+```
+
+That's all!
+
+Negative
+: **TODO: Okta & Lambda example**
+
+## Validating a Workflow
+
+There are two steps to validating your workflow locally. First, we can validate our Terraform config.
+
+```bash
+$ terraform validate
+```
+
+```
+Success! The configuration is valid.
+```
+
+Next, we can lint and validate our Python code. Sym's CLI has a `validate` command to help with this.
+
+```bash
+$ sym validate
+```
+
+
+```
+✅No Python syntax errors!
+✅All required hooks and reducers are implemented!
+✅All references exist and are valid!
+```
+
+## Testing a Workflow
+
+Sym integrates with Python's `unittest` library to allow for easy testing of workflows.
+
+Negative
+: **TODO: Write me**
+
+## Deploying a Workflow
+
+Deploying a workflow with Sym's Terraform provider is simple: just run `terraform init && terraform apply`.
+
+Terraform will create a Workflow in Sym, and upload the config and Python code associated with it. It will also create a cross-account Role in your AWS account for Sym to assume in order to move users into and out of the `SymDemoAdmins` IAM Group. The ARN for this role will automatically be saved in Terraform's outputs, and sent to Sym.
+
+Negative
+: **TODO: output of `terraform apply`**
+
+## Triggering a Workflow
+
+We can test our new workflow by using the Sym CLI to create an event in the Sym API. This will cause `infra_access` to run end-to-end, so get ready to check Slack!
+
+```bash
+sym flow trigger --name=infra_access
+```
+
+```json
+{
+  "type": "event",
+  "name": "TRIGGER_INFRA_ACCESS",
+  "fqn": "event:symops:yasyfm:infra_access:TRIGGER_INFRA_ACCESS",
+  "created_at": "2020-03-27T05:35:23",
+  "uuid": "1830FD4C-2992-4083-B7EC-B0BE644EFC11"
+}
+```
+
+If everything worked, the event was emitted, and you should now have a Slack DM from Sym!
+
+### Propmt
+
+![Sym Request Modal](img/prompt.png)
+
+Select the `SymDemoAdmins` group from the modal, then click "Next".
+
+![Sym Request Success](img/prompt_success.png)
+
+### Request
+
+You should now see an approval request appear in the `#eng` channel.
+
+![Sym Request Success](img/request.png)
+
+### Approval
+
+Get someone else to click the "Approve" button—it won't work if you try to approve yourself!
+
+Negative
+: **TODO: Success screenshot**
+
+Nice, we did it! You've successfully completed the core of the tutorial. Read on if you want to explore some of Sym's more powerful features.
+
+For example, by default, your user will stay in the escalated group for one hour. Our next section walks through how to add an expiration field to the request modal, and use it in a reducer.
+
+## Hook Example: Dynamic Expiration
+
+Negative
+: **TODO: Write me**
+
+## Hook Example: Auto-Escalation via PagerDuty
+
+Negative
+: **TODO: Write me**
+
+## Slack Shortcuts
+
+Negative
+: **TODO: Write me**
