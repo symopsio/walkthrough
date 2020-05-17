@@ -131,14 +131,20 @@ Success! Welcome, Yasyf. 🤓
     
       <google-codelab-step label="Terraform Config" duration="0">
         <p>Let&#39;s take a look at <code>infra_access.tf</code>.</p>
-<pre><code>resource &#34;sym_flow&#34; &#34;infra_access&#34; {
-  meta = {
-    strategies = sym_strategies.escalation_strategies
-  }
+<aside class="special"><p>You can modify this file in your browser by launching a <a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fsymopsio%2Fdocs&cloudshell_open_in_editor=infra_access.tf&cloudshell_working_dir=infra_access&cloudshell_tutorial=README.md" target="_blank">Google Cloud Shell</a>.</p>
+</aside>
+<pre><code>provider &#34;sym&#34; {
+  org = &#34;healthy-health&#34;
+}
 
+resource &#34;sym_flow&#34; &#34;infra_access&#34; {
   handler = {
     parent = &#34;sym:approval&#34;
     hooks = file(&#34;infra_access.py&#34;)
+  }
+
+  meta = {
+    strategies = sym_strategies.escalation_strategies
   }
 }
 
@@ -146,8 +152,19 @@ resource &#34;sym_strategies&#34; &#34;escalation_strategies&#34; {
   // Add your escalation strategies here
 }
 </code></pre>
-<p>The <code>sym_flow</code> resource</p>
+<p>The <code>sym</code> provider provides a <code>sym_flow</code> resource, which you can use to define a new Sym Workflow. There are two required keys, <code>handler</code> and <code>meta</code>.</p>
+<h2 is-upgraded>Handler</h2>
+<p>The <code>handler</code> key defines the structure of the workflow. The <code>handler</code> must specify a parent template (in this case, <code>sym:approval</code>).</p>
+<p>The <code>sym:approval</code> template gives the foundation for an approval workflow in Sym. There are three main steps in this flow: the request, the approval, and the escalation. These steps can be parameterized and customized to fit your needs.</p>
+<p>The <code>handler</code> can also optionally specify <code>hooks</code>: a file with code that modifies the steps of the workflow. Our <code>hooks</code> will be defined in the <code>infra_access.py</code> file, which we will explore in the next section.</p>
+<h2 is-upgraded>Meta</h2>
+<p>The <code>meta</code> key supplies the declarative parameters for our workflow. The <code>sym:approval</code> template defines one required parameter, <code>strategies</code>, which provides the configuration for your escalation strategies. We will add a strategy here after exploring the <code>hooks</code>.</p>
 
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hooks" duration="0">
+        
 
       </google-codelab-step>
     

@@ -128,17 +128,22 @@ You'll notice that this creates a `infra_access` directory with two files: `infr
 
 Let's take a look at `infra_access.tf`.
 
-<button href="">Open in Cloud Shell</button>
+Positive
+: You can modify this file in your browser by launching a [Google Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fsymopsio%2Fdocs&cloudshell_open_in_editor=infra_access.tf&cloudshell_working_dir=infra_access&cloudshell_tutorial=README.md).
 
 ```terraform
-resource "sym_flow" "infra_access" {
-  meta = {
-    strategies = sym_strategies.escalation_strategies
-  }
+provider "sym" {
+  org = "healthy-health"
+}
 
+resource "sym_flow" "infra_access" {
   handler = {
     parent = "sym:approval"
     hooks = file("infra_access.py")
+  }
+
+  meta = {
+    strategies = sym_strategies.escalation_strategies
   }
 }
 
@@ -147,4 +152,18 @@ resource "sym_strategies" "escalation_strategies" {
 }
 ```
 
-The `sym_flow` resource
+The `sym` provider provides a `sym_flow` resource, which you can use to define a new Sym Workflow. There are two required keys, `handler` and `meta`.
+
+### Handler
+
+The `handler` key defines the structure of the workflow. The `handler` must specify a parent template (in this case, `sym:approval`).
+
+The `sym:approval` template gives the foundation for an approval workflow in Sym. There are three main steps in this flow: the request, the approval, and the escalation. These steps can be parameterized and customized to fit your needs.
+
+The `handler` can also optionally specify `hooks`: a file with code that modifies the steps of the workflow. Our `hooks` will be defined in the `infra_access.py` file, which we will explore in the next section.
+
+### Meta
+
+The `meta` key supplies the declarative parameters for our workflow. The `sym:approval` template defines one required parameter, `strategies`, which provides the configuration for your escalation strategies. We will add a strategy here after exploring the `hooks`.
+
+## Hooks
