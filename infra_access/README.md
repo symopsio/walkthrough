@@ -8,7 +8,7 @@ Analytics Account: UA-156651818-3
 ## Welcome
 Duration: 2:00
 
-Hey! I'm [Yasyf](https://twitter.com/yasyf), CEO at [Sym](https://www.symops.io/). Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow. If you want to learn more about how Sym can help you accomplish your compliance goals, please check out our [product overview datasheet](https://docsend.com/view/msq7gw6z94rnjjf8).
+Hey! I'm [Yasyf](https://twitter.com/yasyf), CEO at [Sym](https://www.symops.io/). Today I want to walk you through setting up a simple ephemeral infrastructure access control as a Sym Workflow. If you want to learn more about how Sym can help you accomplish your compliance goals, please check out our [product overview datasheet](https://docsend.com/view/zkkr4s6a2tpct8n4).
 
 ![Sym Overview](img/overview.png)
 
@@ -335,7 +335,7 @@ sym flow trigger --name=infra_access
 
 If everything worked, the event was emitted, and you should now have a Slack DM from Sym!
 
-### Propmt
+### Prompt
 
 ![Sym Request Modal](img/prompt.png)
 
