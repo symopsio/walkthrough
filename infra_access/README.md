@@ -30,7 +30,7 @@ With Sym, we can easily implement a compliant policy that distributes approvals 
 
 When you're done with this tutorial, you'll have a smooth approval flow that you can initiate from your command line, with approvals granted via a message in a Slack channel, and fully-automated privilege escalations.
 
-If you'd rather jump straight into the code, you can find it on GitHub at [symopsio/docs](https://github.com/symopsio/docs/tree/master/infra_access).
+If you'd rather jump straight into the code, you can find it on GitHub at [symopsio/walkthrough](https://github.com/symopsio/walkthrough/tree/master/infra_access).
 
 ## Environment Setup
 Duration: 3:00
